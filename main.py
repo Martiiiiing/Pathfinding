@@ -14,7 +14,7 @@ def readfromtxt(fichier):
             edges[i,j]=int(temp[j])
 
     # print(edges)    
-    return nbnodes, nbedges, edges
+    return nbnodes, nbedges, edges; # ptdr t'es con @martingue
  
 def CreateAdjMat(nbnodes,nbedges,edges):
     AdjMat=np.empty([nbnodes,nbnodes], dtype=int)
