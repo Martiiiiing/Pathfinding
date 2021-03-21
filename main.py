@@ -25,7 +25,10 @@ def CreateAdjMat(nbnodes,nbedges,edges):
     for i in range (nbedges):
         AdjMat[edges[i,0],edges[i,1]]=edges[i,2]
     print(AdjMat)
+    return AdjMat
 
-
-nbnodes, nbedges, edges = readfromtxt('example1.txt')
-CreateAdjMat(nbnodes,nbedges,edges)
+def FloydWarshall(AdjMat):
+    
+fichier=input("Please type the name of the file:")
+nbnodes, nbedges, edges = readfromtxt(fichier)
+AdjMat=CreateAdjMat(nbnodes,nbedges,edges)
