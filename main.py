@@ -27,7 +27,7 @@ def CreateAdjMat(nbnodes,nbedges,edges):
     print(AdjMat)
     return AdjMat
 
-def FloydWarshall(AdjMat):
+# def FloydWarshall(AdjMat):
     
 fichier=input("Please type the name of the file:")
 nbnodes, nbedges, edges = readfromtxt(fichier)
