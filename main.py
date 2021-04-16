@@ -35,7 +35,7 @@ def FloydWarshall(AdjMat,nbnodes):
         for b in range (nbnodes):
             if AdjMat[a,b] == np.inf:
                 P[a,b]=None
-            else:
+            else:       #Filling P matrix which is a matrix containing the last predecessor of the walk in question
                 P[a,b]=a
             for c in range (nbnodes):
                 if L[b,a] == np.inf or L[a,c]== np.inf:
@@ -44,14 +44,14 @@ def FloydWarshall(AdjMat,nbnodes):
                 else:
                     temp = L[b,a]+L[a,c]
                 if L[b,c] > temp:
-                    L[b,c] = temp
-                    P[b,c] = a
+                    L[b,c] = temp   #if we find a shorter path using and intermediary vertex we replace the weight in L matrix
+                    P[b,c] = a  # and update P putting the name of that intermediary
            
     return L,P
 
 def FindCircuitsAbso(L, nbnodes):
-    for i in range (nbnodes):
-        if L[i,i]<0:
+    for i in range (nbnodes): # we check each vertex
+        if L[i,i]<0: #There is a cicle if the distance of a vertex to itself < 0 
             print("An absorbant circuit was found")
             return 1
 
