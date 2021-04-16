@@ -37,18 +37,16 @@ def FloydWarshall(AdjMat,nbnodes):
                 P[a,b]=None
             else:
                 P[a,b]=a
-
-    for k in range (nbnodes):
-        for i in range (nbnodes):
-            for j in range (nbnodes):
-                if L[i,k] == np.inf or L[k,j]== np.inf:
+            for c in range (nbnodes):
+                if L[b,a] == np.inf or L[a,c]== np.inf:
                     #to prevent overflows
                     temp = np.inf
                 else:
-                    temp = L[i,k]+L[k,j]
-                if L[i,j] > temp:
-                    L[i,j] = temp
-                    P[i,j] = k
+                    temp = L[b,a]+L[a,c]
+                if L[b,c] > temp:
+                    L[b,c] = temp
+                    P[b,c] = a
+           
     return L,P
 
 def FindCircuitsAbso(L, nbnodes):
@@ -62,8 +60,12 @@ def FindCircuitsAbso(L, nbnodes):
 fichier = input("Please type the name of the file:")
 nbnodes, nbedges, edges = readfromtxt(fichier)
 AdjMat = CreateAdjMat(nbnodes,nbedges,edges)
-# print(AdjMat)
+
+print("AdjMat is:")
+print (AdjMat)
+
 L,P = FloydWarshall(AdjMat,nbnodes)
+
 print("L matrix is:")
 print(L)
 print("P Matrix is:")
