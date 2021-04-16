@@ -8,23 +8,23 @@ def readfromtxt(fichier):
     edges = np.empty([nbedges,3], dtype=int)
 
     for i in range (nbedges): 
-        temp = file_object.readline()
-        temp = temp.split()
+        temp = file_object.readline() #reads each line
+        temp = temp.split()# splits each string using " " as separator
 
         for j in range (3):
-            edges[i,j] = int(temp[j])
+            edges[i,j] = int(temp[j]) #converts strings to int and puts it into the table
 
     # print(edges)    
     return nbnodes, nbedges, edges
  
 def CreateAdjMat(nbnodes,nbedges,edges):
-    AdjMat = np.empty([nbnodes,nbnodes], dtype=float)
-    AdjMat[:] = np.inf
+    AdjMat = np.empty([nbnodes,nbnodes], dtype=float) #init numpy array
+    AdjMat[:] = np.inf #sets all values to inf
     for a in range(nbnodes):
-        AdjMat[a,a] = 0
+        AdjMat[a,a] = 0 #sets the distance between each to itself as 0
     # print(AdjMat)
     for i in range (nbedges):
-        AdjMat[edges[i,0],edges[i,1]] = edges[i,2]
+        AdjMat[edges[i,0],edges[i,1]] = edges[i,2] #fills the rest of the adj matrix 
     
     return AdjMat
 
@@ -39,7 +39,7 @@ def FloydWarshall(AdjMat,nbnodes):
                 P[a,b]=a
             for c in range (nbnodes):
                 if L[b,a] == np.inf or L[a,c]== np.inf:
-                    #to prevent overflows
+                    
                     temp = np.inf
                 else:
                     temp = L[b,a]+L[a,c]
@@ -70,3 +70,4 @@ print("L matrix is:")
 print(L)
 print("P Matrix is:")
 print(P)
+FindCircuitsAbso(L, nbnodes)
