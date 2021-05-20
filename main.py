@@ -1,6 +1,8 @@
 import numpy as np
 import math
 
+from numpy.core.defchararray import chararray
+
 def readfromtxt(fichier):
     file_object = open(fichier,'r')
     nbnodes = int(file_object.readline())
@@ -28,10 +30,30 @@ def CreateAdjMat(nbnodes,nbedges,edges):
     
     return AdjMat
 
+
+def printMat(mat, nbnodes):
+    mat2=np.empty([nbnodes+1,nbnodes+1],dtype=chararray)
+    mat2[0,0]=" "
+    for i in range (nbnodes):
+        mat2[0,i+1]="col "+str(i)
+        mat2[i+1,0]=str(i)
+        for j in range(nbnodes):
+            mat2[i+1,j+1]=str(mat[i,j])
+            if len(mat2[i+1,j+1]) >=6:
+                mat2[i+1,j+1]=None
+            while len(mat2[i+1,j+1]) <5:
+                mat2[i+1,j+1]=mat2[i+1,j+1]+" "
+            
+    print(mat2)
+
 def FloydWarshall(AdjMat,nbnodes):
     L = AdjMat
     P = np.empty([nbnodes,nbnodes], dtype= float)
     for a in range (nbnodes):
+        print("L matrix at iteration "+ str(a) + " is:")
+        printMat(L,nbnodes)
+        print("P matrix at iteration "+ str(a) + " is:")
+        printMat(P,nbnodes)
         for b in range (nbnodes):
             if AdjMat[a,b] == np.inf:
                 P[a,b]=None
@@ -46,7 +68,7 @@ def FloydWarshall(AdjMat,nbnodes):
                 if L[b,c] > temp:
                     L[b,c] = temp   #if we find a shorter path using and intermediary vertex we replace the weight in L matrix
                     P[b,c] = a  # and update P putting the name of that intermediary
-           
+                  
     return L,P
 
 def FindCircuitsAbso(L, nbnodes):
@@ -55,19 +77,17 @@ def FindCircuitsAbso(L, nbnodes):
             print("An absorbant circuit was found")
             return 1
 
-    return 0
+        print("No absorbant circuit was found")
+        return 0
+    
 
 fichier = input("Please type the name of the file:")
 nbnodes, nbedges, edges = readfromtxt(fichier)
 AdjMat = CreateAdjMat(nbnodes,nbedges,edges)
 
-print("AdjMat is:")
-print (AdjMat)
+# print("AdjMat is:")
+# print (AdjMat)
 
 L,P = FloydWarshall(AdjMat,nbnodes)
 
-print("L matrix is:")
-print(L)
-print("P Matrix is:")
-print(P)
 FindCircuitsAbso(L, nbnodes)
