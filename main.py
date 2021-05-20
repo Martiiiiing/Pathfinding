@@ -40,7 +40,7 @@ def printMat(mat, nbnodes):
         for j in range(nbnodes):
             mat2[i+1,j+1]=str(mat[i,j])
             if len(mat2[i+1,j+1]) >=6:
-                mat2[i+1,j+1]=None
+                mat2[i+1,j+1]="nan"
             while len(mat2[i+1,j+1]) <5:
                 mat2[i+1,j+1]=mat2[i+1,j+1]+" "
             
