@@ -39,10 +39,10 @@ def printMat(mat, nbnodes):
         mat2[i+1,0]=str(i)
         for j in range(nbnodes):
             mat2[i+1,j+1]=str(mat[i,j])#copy paste the mat into the new one as strings for postioning purposes
-            if len(mat2[i+1,j+1]) >=7: #this is only idiot proof, but ensures that positioning cannot be fucked even with some Float/NoneType overflows
+            if len(mat2[i+1,j+1]) >=7: #this is only idiot proof, but ensures that positioning cannot be broken even with some Float/NoneType overflows
                 mat2[i+1,j+1]="nan"
             while len(mat2[i+1,j+1]) <5:#makes all strings the same length
-                mat2[i+1,j+1]=mat2[i+1,j+1]+" "
+                mat2[i+1,j+1]=" "+mat2[i+1,j+1]
             
     print(mat2)
 
