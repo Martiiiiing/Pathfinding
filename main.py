@@ -1,6 +1,4 @@
 import numpy as np
-import math
-
 from numpy.core.defchararray import chararray
 
 def readfromtxt(fichier):
@@ -23,25 +21,25 @@ def CreateAdjMat(nbnodes,nbedges,edges):
     AdjMat = np.empty([nbnodes,nbnodes], dtype=float) #init numpy array
     AdjMat[:] = np.inf #sets all values to inf
     for a in range(nbnodes):
-        AdjMat[a,a] = 0 #sets the distance between each to itself as 0
+        AdjMat[a,a] = 0 #sets the distance between each node to itself as 0
     # print(AdjMat)
     for i in range (nbedges):
-        AdjMat[edges[i,0],edges[i,1]] = edges[i,2] #fills the rest of the adj matrix 
+        AdjMat[edges[i,0]-1,edges[i,1]-1] = edges[i,2] #fills the rest of the adj matrix 
     
     return AdjMat
 
 
 def printMat(mat, nbnodes):
-    mat2=np.empty([nbnodes+1,nbnodes+1],dtype=chararray)
-    mat2[0,0]=" "
+    mat2=np.empty([nbnodes+1,nbnodes+1],dtype=chararray) #create a new array with one more row and column
+    mat2[0,0]=" " #set the 1 tile as empty
     for i in range (nbnodes):
-        mat2[0,i+1]="col "+str(i)
+        mat2[0,i+1]="col "+str(i) #naming rows and columns
         mat2[i+1,0]=str(i)
         for j in range(nbnodes):
-            mat2[i+1,j+1]=str(mat[i,j])
-            if len(mat2[i+1,j+1]) >=6:
+            mat2[i+1,j+1]=str(mat[i,j])#copy paste the mat into the new one as strings for postioning purposes
+            if len(mat2[i+1,j+1]) >=7: #this is only idiot proof, but ensures that positioning cannot be fucked even with some Float/NoneType overflows
                 mat2[i+1,j+1]="nan"
-            while len(mat2[i+1,j+1]) <5:
+            while len(mat2[i+1,j+1]) <5:#makes all strings the same length
                 mat2[i+1,j+1]=mat2[i+1,j+1]+" "
             
     print(mat2)
@@ -72,22 +70,29 @@ def FloydWarshall(AdjMat,nbnodes):
     return L,P
 
 def FindCircuitsAbso(L, nbnodes):
-    for i in range (nbnodes): # we check each vertex
-        if L[i,i]<0: #There is a cicle if the distance of a vertex to itself < 0 
-            print("An absorbant circuit was found")
-            return 1
-
-        print("No absorbant circuit was found")
+    cycle=0
+    for node in range (nbnodes): # we check each vertex
+        if L[node,node]<0: #There is a cicle if the distance of a vertex to itself < 0 
+            cycle=1
+    if cycle==1:
+        print("An absorbant cycle was found")
+        return 1
+    else:
+        print("No absorbant cycle was found")
         return 0
-    
 
-fichier = input("Please type the name of the file:")
-nbnodes, nbedges, edges = readfromtxt(fichier)
-AdjMat = CreateAdjMat(nbnodes,nbedges,edges)
 
-# print("AdjMat is:")
-# print (AdjMat)
+loop=1
+while loop==1:
+    fichier = input("Please type the name of the file:")
+    nbnodes, nbedges, edges = readfromtxt(fichier)
+    AdjMat = CreateAdjMat(nbnodes,nbedges,edges)
+    print("AdjMat is:")
+    printMat(AdjMat,nbnodes)
+    # print("AdjMat is:")
+    # print (AdjMat)
 
-L,P = FloydWarshall(AdjMat,nbnodes)
-
-FindCircuitsAbso(L, nbnodes)
+    L,P = FloydWarshall(AdjMat,nbnodes)
+    # print(L)
+    FindCircuitsAbso(L, nbnodes)
+    loop=int(input("Do you want to continue(0/1):"))
