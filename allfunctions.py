@@ -72,13 +72,12 @@ def FloydWarshall(AdjMat,nbnodes):
     return L,P
 
 def FindCircuitsAbso(L, nbnodes):
-    cycle=0
+    
     for node in range (nbnodes): # we check each vertex
         if L[node,node]<0: #There is a cicle if the distance of a vertex to itself < 0 
-            cycle=1
-    if cycle==1:
-        print("An absorbant cycle was found")
-        return 1
-    else:
-        print("No absorbant cycle was found")
-        return 0
+            
+            print("An absorbant cycle was found")
+            return 1
+
+    print("No absorbant cycle was found")
+    return 0
